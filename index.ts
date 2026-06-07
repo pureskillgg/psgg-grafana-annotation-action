@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 import axios from 'axios';
-import moment from 'moment';
 
 type Headers = {
     'Content-Type': string;
@@ -12,12 +11,10 @@ interface AnnotationPayload {
     text: string;
     dashboardId?: number;
     panelId?: number;
-    timeEnd?: number;
 }
 
 export const run = async (): Promise<void> => {
     try {
-        let globalAnnotation = true;
         const grafanaHost: string = core.getInput('grafanaHost', { required: true });
         const grafanaToken: string = core.getInput('grafanaToken', { required: true });
         const grafanaTags: string[] = core.getInput('grafanaTags').split('\n').filter(x => x !== '');
@@ -34,14 +31,8 @@ export const run = async (): Promise<void> => {
         if (grafanaAnnotationID === undefined) {
             console.log('Creating a new annotation');
 
-            if ((grafanaDashboardID === undefined && grafanaPanelID !== undefined) ||
-                (grafanaDashboardID !== undefined && grafanaPanelID === undefined)) {
-                return core.error('Must supply both grafanaDashboardID, grafanaPanelID or none.');
-            }
-
-            if (grafanaDashboardID !== undefined && grafanaPanelID !== undefined) {
-                console.log('Dashboard and panel specified, non-global annotation will be created.');
-                globalAnnotation = false;
+            if ((grafanaDashboardID === undefined) !== (grafanaPanelID === undefined)) {
+                throw new Error('Must supply both grafanaDashboardID, grafanaPanelID or none.');
             }
 
             const payload: AnnotationPayload = {
@@ -49,46 +40,29 @@ export const run = async (): Promise<void> => {
                 text: grafanaText,
             };
 
-            if (!globalAnnotation) {
+            if (grafanaDashboardID !== undefined && grafanaPanelID !== undefined) {
+                console.log('Dashboard and panel specified, non-global annotation will be created.');
                 payload.dashboardId = grafanaDashboardID;
                 payload.panelId = grafanaPanelID;
             }
 
             console.log('Payload: ' + JSON.stringify(payload));
 
-            // Using async/await for axios POST request
-            try {
-                const response = await axios.post(`${grafanaHost}/api/annotations`, payload, { headers });
-                const annotationId = response.data.id;
-                console.log(`Successfully created an annotation with the following id [${annotationId}]`);
-                core.setOutput('annotation-id', annotationId);
-            } catch (err) {
-                console.error('Error in POST /api/annotations:', err);
-                core.setFailed(`Error in POST /api/annotations: ${err}`);
-            }
+            const response = await axios.post(`${grafanaHost}/api/annotations`, payload, { headers });
+            const annotationId = response.data.id;
+            console.log(`Successfully created an annotation with the following id [${annotationId}]`);
+            core.setOutput('annotation-id', annotationId);
 
         } else {
             console.log('Updating the end time of existing annotation');
-            const payload: Partial<AnnotationPayload> = {
-                timeEnd: moment().valueOf(),
-            };
-
             console.log(`Updating the 'time-end' of annotation [${grafanaAnnotationID}]`);
 
-            try {
-                await axios.patch(`${grafanaHost}/api/annotations/${grafanaAnnotationID}`, payload, { headers });
-                console.log('Successfully updated the annotation with time-end');
-            } catch (err) {
-                console.error('Error in PATCH /api/annotations:', err);
-                core.setFailed(`Error in PATCH /api/annotations: ${err}`);
-            }
+            const payload: { timeEnd: number } = { timeEnd: Date.now() };
+            await axios.patch(`${grafanaHost}/api/annotations/${grafanaAnnotationID}`, payload, { headers });
+            console.log('Successfully updated the annotation with time-end');
         }
     } catch (err) {
-        if (err instanceof Error) {
-            core.setFailed(err.message);
-        } else {
-            console.error('An unexpected error occurred');
-        }
+        core.setFailed(err instanceof Error ? err.message : String(err));
     }
 };
 
