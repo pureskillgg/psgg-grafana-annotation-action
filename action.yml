@@ -1,5 +1,5 @@
-name: grafana-annotation-actions
-author: Daniel O'Neill
+name: psgg-grafana-annotation-action
+author: Bill Freeman
 description: >-
   Create Grafana annotations using Github Actions. Update the annotation end
   time after an Action is finished.
