@@ -1,6 +1,8 @@
-# grafana-annotation-action <a href="https://github.com/hexionas/grafana-annotation-action/actions"><img alt="status" src="https://github.com/hexionas/grafana-annotation-action/workflows/CI/badge.svg"></a> [![Latest Stable Version](https://img.shields.io/github/v/release/hexionas/grafana-annotation-action?)](https://github.com/hexionas/grafana-annotation-action/releases)
+# grafana-annotation-action <a href="https://github.com/pureskillgg/psgg-grafana-annotation-action/actions"><img alt="status" src="https://github.com/pureskillgg/psgg-grafana-annotation-action/workflows/CI/badge.svg"></a> [![Latest Stable Version](https://img.shields.io/github/v/release/pureskillgg/psgg-grafana-annotation-action?)](https://github.com/pureskillgg/psgg-grafana-annotation-action/releases)
 
 GitHub Action for Grafana annotations.
+
+> Branched from the archived [grafana-annotation-actions](https://github.com/marketplace/actions/grafana-annotation-actions) action. Maintained by [@billfreeman44](https://github.com/billfreeman44).
 
 ![Example Image](images/example.png)
 
@@ -14,7 +16,7 @@ jobs:
     steps:
       - name: Add Grafana annotation
         id: grafana
-        uses: hexionas/grafana-annotation-action@v0
+        uses: pureskillgg/psgg-grafana-annotation-action@v1
         with:
           grafanaHost: "https://grafana.example.com"
           grafanaToken: ${{ secrets.GRAFANA_TOKEN }}
@@ -27,7 +29,7 @@ jobs:
       - name: Action that takes some time
         run: sleep 30
       - name: Update Grafana annotation
-        uses: hexionas/grafana-annotation-action@v0
+        uses: pureskillgg/psgg-grafana-annotation-action@v1
         with:
           grafanaHost: "https://grafana.example.com"
           grafanaToken: ${{ secrets.GRAFANA_TOKEN }}
@@ -38,8 +40,8 @@ jobs:
 
 * `grafanaHost` **Required**: The Grafana API host.
 * `grafanaToken` **Required**: The Grafana API authentication token.
-* `grafanaText` **Required**: The Grafana Annotation text.
+* `grafanaText` **Required** when creating, optional when updating: The Grafana annotation text.
 * `grafanaDashboardID` **Optional**: Used to target a specific dashboard panel alongside `grafanaPanelID`.
 * `grafanaPanelID` **Optional**: Used to target a specific panel alongside `grafanaDashboardID`.
-* `grafanaTags` **Optional**: Newline separated tags that will be sent with annotation.
-* `grafanaAnnotationID` **Optional**: If supplied, an exiting annotation will be updated with the end-time as current time.
+* `grafanaTags` **Optional**: Newline separated tags that will be sent with the annotation.
+* `grafanaAnnotationID` **Optional**: If supplied, an existing annotation will be updated with the current time as its end time.
