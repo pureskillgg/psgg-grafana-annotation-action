@@ -1,9 +1,11 @@
 import { run } from './index';
 import axios from "axios";
+import * as core from "@actions/core";
 
 jest.mock("axios");
 const mockedAxiosPost = axios.post as jest.MockedFunction<typeof axios.post>;
 const mockedAxiosPatch = axios.patch as jest.MockedFunction<typeof axios.patch>;
+jest.spyOn(core, 'setFailed').mockImplementation(() => {});
 
 const INPUT_VARS = [
     'INPUT_GRAFANAHOST',
