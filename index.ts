@@ -66,4 +66,6 @@ export const run = async (): Promise<void> => {
     }
 };
 
-run();
+if (require.main === module) {
+    run();
+}
