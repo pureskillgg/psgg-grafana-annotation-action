@@ -1,5 +1,5 @@
 {
-  "name": "grafana-annotation-action",
+  "name": "psgg-grafana-annotation-action",
   "description": "GitHub Action for Grafana annotations.",
   "main": "dist/index.js",
   "scripts": {
@@ -10,27 +10,33 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danieloneilldazn/grafana-annotation-action.git"
+    "url": "git+https://github.com/pureskillgg/psgg-grafana-annotation-action.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "PureSkill.gg",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/danieloneilldazn/grafana-annotation-action/issues"
+    "url": "https://github.com/pureskillgg/psgg-grafana-annotation-action/issues"
   },
-  "homepage": "https://github.com/danieloneilldazn/grafana-annotation-action#readme",
+  "homepage": "https://github.com/pureskillgg/psgg-grafana-annotation-action#readme",
   "dependencies": {
-    "@actions/core": "^1.10.0",
+    "@actions/core": "^1.11.1",
     "axios": "^1.17.0"
   },
+  "overrides": {
+    "undici": "^6.27.0"
+  },
   "devDependencies": {
-    "@types/jest": "^29.5.12",
+    "@eslint/js": "^9.39.4",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.13.1",
-    "@typescript-eslint/eslint-plugin": "^7.6.0",
-    "@typescript-eslint/parser": "^7.6.0",
-    "@vercel/ncc": "^0.38.1",
-    "eslint": "^8.57.0",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.2"
+    "@vercel/ncc": "^0.38.3",
+    "convert-action": "^0.5.0",
+    "eslint": "^9.39.4",
+    "globals": "^16.5.0",
+    "jest": "^30.0.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.20.0"
   }
 }
